@@ -15,6 +15,7 @@ spec:
       labels:
         app: n8n
     spec:
+      enableServiceLinks: false
       initContainers:
       # Pre-install the WAHA community node so it's available on first startup
       - name: install-waha-node
@@ -119,13 +120,13 @@ spec:
           httpGet:
             path: /healthz
             port: 5678
-          initialDelaySeconds: 30
+          initialDelaySeconds: 60
           periodSeconds: 10
         livenessProbe:
           httpGet:
             path: /healthz
             port: 5678
-          initialDelaySeconds: 60
+          initialDelaySeconds: 120
           periodSeconds: 20
         volumeMounts:
         - name: n8n-data
