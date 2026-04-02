@@ -37,6 +37,8 @@ spec:
             secretKeyRef:
               name: automation-secrets
               key: postgres-db
+        - name: POSTGRES_HOST_AUTH_METHOD
+          value: trust
         resources:
           requests:
             memory: "256Mi"
