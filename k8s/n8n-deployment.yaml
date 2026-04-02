@@ -1,0 +1,136 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: n8n
+  namespace: automation
+  labels:
+    app: n8n
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n8n
+  template:
+    metadata:
+      labels:
+        app: n8n
+    spec:
+      initContainers:
+      # Pre-install the WAHA community node so it's available on first startup
+      - name: install-waha-node
+        image: n8nio/n8n:latest
+        command:
+        - sh
+        - -c
+        - |
+          cd /home/node/.n8n
+          mkdir -p nodes
+          cd nodes
+          npm install @devlikeapro/n8n-nodes-waha --no-save 2>&1 || true
+          echo "WAHA node installation complete."
+        volumeMounts:
+        - name: n8n-data
+          mountPath: /home/node/.n8n
+        securityContext:
+          runAsUser: 1000
+      containers:
+      - name: n8n
+        image: n8nio/n8n:latest
+        ports:
+        - containerPort: 5678
+          name: http
+        env:
+        # Database
+        - name: DB_TYPE
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: DB_TYPE
+        - name: DB_POSTGRESDB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: DB_POSTGRESDB_HOST
+        - name: DB_POSTGRESDB_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: DB_POSTGRESDB_PORT
+        - name: DB_POSTGRESDB_DATABASE
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: DB_POSTGRESDB_DATABASE
+        - name: DB_POSTGRESDB_USER
+          valueFrom:
+            secretKeyRef:
+              name: automation-secrets
+              key: postgres-user
+        - name: DB_POSTGRESDB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: automation-secrets
+              key: postgres-password
+        # Redis (AI Agent memory)
+        - name: QUEUE_BULL_REDIS_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: REDIS_HOST
+        - name: QUEUE_BULL_REDIS_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: REDIS_PORT
+        - name: QUEUE_BULL_REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: automation-secrets
+              key: redis-password
+        # General
+        - name: GENERIC_TIMEZONE
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: GENERIC_TIMEZONE
+        - name: N8N_LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: N8N_LOG_LEVEL
+        - name: N8N_COMMUNITY_PACKAGES_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: N8N_COMMUNITY_PACKAGES_ENABLED
+        - name: N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 5678
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 5678
+          initialDelaySeconds: 60
+          periodSeconds: 20
+        volumeMounts:
+        - name: n8n-data
+          mountPath: /home/node/.n8n
+      volumes:
+      - name: n8n-data
+        persistentVolumeClaim:
+          claimName: n8n-pvc

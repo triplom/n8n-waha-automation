@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: automation-config
+  namespace: automation
+data:
+  # Postgres
+  POSTGRES_HOST: "postgres"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "n8n"
+
+  # Redis
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+
+  # N8N
+  GENERIC_TIMEZONE: "America/Sao_Paulo"
+  N8N_LOG_LEVEL: "info"
+  N8N_COMMUNITY_PACKAGES_ENABLED: "true"
+  N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE: "true"
+  DB_TYPE: "postgresdb"
+  DB_POSTGRESDB_HOST: "postgres"
+  DB_POSTGRESDB_PORT: "5432"
+  DB_POSTGRESDB_DATABASE: "n8n"
+  # WEBHOOK_URL is the externally reachable URL for N8N
+  # Update this to match your actual host/port after deployment
+  N8N_WEBHOOK_URL: "http://localhost:5678/"
+
+  # WAHA
+  WHATSAPP_DEFAULT_ENGINE: "GOWS"
+  WHATSAPP_HOOK_EVENTS: "message"
+  # Intra-namespace URL: WAHA → N8N service
+  WHATSAPP_HOOK_URL: "http://n8n:5678/webhook/webhook"
+  WAHA_NO_API_KEY: "true"
+  WAHA_DASHBOARD_NO_PASSWORD: "true"

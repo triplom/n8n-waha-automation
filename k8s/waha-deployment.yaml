@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: waha
+  namespace: automation
+  labels:
+    app: waha
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: waha
+  template:
+    metadata:
+      labels:
+        app: waha
+    spec:
+      containers:
+      - name: waha
+        image: devlikeapro/waha:latest
+        ports:
+        - containerPort: 3000
+          name: http
+        envFrom:
+        - configMapRef:
+            name: automation-config
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        volumeMounts:
+        - name: waha-sessions
+          mountPath: /app/.sessions
+        - name: waha-media
+          mountPath: /app/media
+      volumes:
+      - name: waha-sessions
+        persistentVolumeClaim:
+          claimName: waha-sessions-pvc
+      - name: waha-media
+        persistentVolumeClaim:
+          claimName: waha-media-pvc
