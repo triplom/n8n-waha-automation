@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: waha
-        image: devlikeapro/waha:latest
+        image: devlikeapro/waha:noweb
         ports:
         - containerPort: 3000
           name: http
