@@ -51,7 +51,7 @@ spec:
             command:
             - sh
             - -c
-            - "pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)"
+            - "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"
           initialDelaySeconds: 15
           periodSeconds: 10
         readinessProbe:
@@ -59,7 +59,7 @@ spec:
             command:
             - sh
             - -c
-            - "pg_isready -U $(POSTGRES_USER) -d $(POSTGRES_DB)"
+            - "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"
           initialDelaySeconds: 5
           periodSeconds: 5
         volumeMounts:
