@@ -109,6 +109,22 @@ spec:
             configMapKeyRef:
               name: automation-config
               key: N8N_COMMUNITY_PACKAGES_ALLOW_TOOL_USAGE
+        # Public URL / proxy settings
+        - name: N8N_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: N8N_HOST
+        - name: N8N_PROTOCOL
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: N8N_PROTOCOL
+        - name: N8N_WEBHOOK_URL
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: N8N_WEBHOOK_URL
         resources:
           requests:
             memory: "256Mi"

@@ -24,6 +24,8 @@ data:
   DB_POSTGRESDB_DATABASE: "n8n"
   # WEBHOOK_URL is the externally reachable URL for N8N
   N8N_WEBHOOK_URL: "https://n8n.local/"
+  N8N_HOST: "n8n.local"
+  N8N_PROTOCOL: "https"
 
   # WAHA
   WHATSAPP_DEFAULT_ENGINE: "GOWS"
