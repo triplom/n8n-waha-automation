@@ -125,6 +125,16 @@ spec:
             configMapKeyRef:
               name: automation-config
               key: N8N_WEBHOOK_URL
+        - name: N8N_EDITOR_BASE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: N8N_EDITOR_BASE_URL
+        - name: N8N_RUNNERS_ENABLED
+          valueFrom:
+            configMapKeyRef:
+              name: automation-config
+              key: N8N_RUNNERS_ENABLED
         resources:
           requests:
             memory: "256Mi"
