@@ -28,8 +28,6 @@ data:
   N8N_PROTOCOL: "https"
   # Override the editor URL so n8n doesn't append :5678 (internal port)
   N8N_EDITOR_BASE_URL: "https://n8n.local"
-  # Disable external JS task runner subprocess (avoids 403 race on startup)
-  N8N_RUNNERS_ENABLED: "false"
 
   # WAHA
   WHATSAPP_DEFAULT_ENGINE: "GOWS"
