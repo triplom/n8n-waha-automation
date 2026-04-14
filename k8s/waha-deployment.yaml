@@ -7,6 +7,8 @@ metadata:
     app: waha
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: waha
@@ -31,30 +33,6 @@ spec:
           limits:
             memory: "1Gi"
             cpu: "1000m"
-        startupProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 10
-          periodSeconds: 5
-          failureThreshold: 12
-          timeoutSeconds: 5
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 0
-          periodSeconds: 10
-          timeoutSeconds: 5
-          failureThreshold: 3
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 3000
-          initialDelaySeconds: 0
-          periodSeconds: 20
-          timeoutSeconds: 5
-          failureThreshold: 3
         volumeMounts:
         - name: waha-sessions
           mountPath: /app/.sessions
