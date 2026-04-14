@@ -143,12 +143,16 @@ spec:
             port: 5678
           initialDelaySeconds: 60
           periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
         livenessProbe:
           httpGet:
             path: /healthz
             port: 5678
           initialDelaySeconds: 120
           periodSeconds: 20
+          timeoutSeconds: 5
+          failureThreshold: 3
         volumeMounts:
         - name: n8n-data
           mountPath: /home/node/.n8n
