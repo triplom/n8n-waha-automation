@@ -34,5 +34,4 @@ data:
   WHATSAPP_HOOK_EVENTS: "message"
   # Intra-namespace URL: WAHA → N8N service
   WHATSAPP_HOOK_URL: "http://n8n:5678/webhook/webhook"
-  WAHA_NO_API_KEY: "true"
   WAHA_DASHBOARD_NO_PASSWORD: "true"

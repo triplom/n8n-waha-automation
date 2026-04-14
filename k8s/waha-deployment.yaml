@@ -26,6 +26,12 @@ spec:
         envFrom:
         - configMapRef:
             name: automation-config
+        env:
+        - name: WAHA_API_KEY
+          valueFrom:
+            secretKeyRef:
+              name: automation-secrets
+              key: waha-api-key
         resources:
           requests:
             memory: "256Mi"
